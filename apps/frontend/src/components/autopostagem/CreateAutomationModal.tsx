@@ -190,18 +190,18 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                     <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-3 scrollbar scrollbar-thumb-fifth scrollbar-track-transparent">
                         {/* Nome da Automação */}
                         <div className="flex flex-col gap-2 group">
-                            <label className="text-sm font-bold text-textColor/80 group-focus-within:text-forth transition-colors">Nome da Automação</label>
+                            <label className="text-sm font-bold text-textColor/90 group-focus-within:text-forth transition-colors duration-200">Nome da Automação</label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="p-4 bg-black/5 dark:bg-black/40 border border-black/5 dark:border-white/5 rounded-xl text-black dark:text-white outline-none focus:border-forth/50 focus:ring-4 focus:ring-forth/5 transition-all placeholder:text-black/20 dark:placeholder:text-white/20"
+                                className="p-4 bg-newBgColorInner border border-newTextColor/10 rounded-xl text-textColor outline-none focus:border-forth/50 focus:ring-2 focus:ring-forth/20 transition-all duration-200 placeholder:text-textColor/30 hover:border-newTextColor/20"
                                 placeholder="Ex: Posts Diários de Dicas"
                             />
                         </div>
 
                         {/* Integrações */}
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
                             <IntegrationSelector
                                 integrations={integrations}
                                 selected={selectedIntegrations}
@@ -210,7 +210,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                         </div>
 
                         {/* Legendas */}
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
                             <CaptionList
                                 captions={captions}
                                 onChange={setCaptions}
@@ -218,7 +218,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                         </div>
 
                         {/* Mídias */}
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm border border-black/5 dark:border-white/5">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-4 bg-forth rounded-full"></div>
@@ -244,7 +244,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                         </div>
 
                         {/* Agendamento (Dias e Horários) */}
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm border border-black/5 dark:border-white/5 flex flex-col gap-8">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200 flex flex-col gap-8">
                             {/* Dias da Semana */}
                             <DaysSelector
                                 selected={daysOfWeek}
@@ -273,35 +273,35 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                         </div>
 
                         {/* Opções Avançadas */}
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm border border-black/5 dark:border-white/5 flex flex-col gap-6">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200 flex flex-col gap-6">
                             {/* Legendas Aleatórias */}
-                            <div className="flex items-center gap-4 group cursor-pointer" onClick={() => setRandomCaptions(!randomCaptions)}>
-                                <div className={`w-10 h-6 rounded-full p-1 transition-colors duration-200 ${randomCaptions ? 'bg-forth' : 'bg-black/20 dark:bg-white/10'}`}>
-                                    <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-200 ${randomCaptions ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                            <div className="flex items-center gap-4 group cursor-pointer hover:bg-newBgColorInner/50 p-3 rounded-lg transition-all duration-200" onClick={() => setRandomCaptions(!randomCaptions)}>
+                                <div className={`w-11 h-6 rounded-full p-0.5 transition-all duration-300 ${randomCaptions ? 'bg-forth shadow-lg shadow-forth/30' : 'bg-newTextColor/10'}`}>
+                                    <div className={`w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${randomCaptions ? 'translate-x-5' : 'translate-x-0'}`}></div>
                                 </div>
-                                <label className="text-sm text-textColor/80 cursor-pointer flex-1 font-medium group-hover:text-textColor transition-colors">
+                                <label className="text-sm text-textColor/80 cursor-pointer flex-1 font-medium group-hover:text-textColor transition-colors duration-200">
                                     Usar legendas aleatórias (escolhe uma legenda diferente para cada post)
                                 </label>
                             </div>
 
                             {/* Excluir Mídia Após Post */}
-                            <div className="flex items-center gap-4 group cursor-pointer" onClick={() => setDeleteMediaAfterPost(!deleteMediaAfterPost)}>
-                                <div className={`w-10 h-6 rounded-full p-1 transition-colors duration-200 ${deleteMediaAfterPost ? 'bg-forth' : 'bg-black/20 dark:bg-white/10'}`}>
-                                    <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-200 ${deleteMediaAfterPost ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                            <div className="flex items-center gap-4 group cursor-pointer hover:bg-newBgColorInner/50 p-3 rounded-lg transition-all duration-200" onClick={() => setDeleteMediaAfterPost(!deleteMediaAfterPost)}>
+                                <div className={`w-11 h-6 rounded-full p-0.5 transition-all duration-300 ${deleteMediaAfterPost ? 'bg-forth shadow-lg shadow-forth/30' : 'bg-newTextColor/10'}`}>
+                                    <div className={`w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${deleteMediaAfterPost ? 'translate-x-5' : 'translate-x-0'}`}></div>
                                 </div>
-                                <label className="text-sm text-textColor/80 cursor-pointer flex-1 font-medium group-hover:text-textColor transition-colors">
+                                <label className="text-sm text-textColor/80 cursor-pointer flex-1 font-medium group-hover:text-textColor transition-colors duration-200">
                                     Excluir mídia após o uso (evita repetições se as mídias acabarem)
                                 </label>
                             </div>
 
                             {/* Apagar Mídias de Posts Agendados (Apenas na Edição) */}
                             {editAutopostId && (
-                                <div className="flex items-center gap-4 group cursor-pointer pt-4 border-t border-black/5 dark:border-white/5" onClick={() => setDeleteScheduledMedia(!deleteScheduledMedia)}>
-                                    <div className={`w-10 h-6 rounded-full p-1 transition-colors duration-200 ${deleteScheduledMedia ? 'bg-red-500' : 'bg-black/20 dark:bg-white/10'}`}>
-                                        <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-200 ${deleteScheduledMedia ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                <div className="flex items-center gap-4 group cursor-pointer pt-4 border-t border-newTextColor/5 hover:bg-red-500/5 p-3 rounded-lg transition-all duration-200" onClick={() => setDeleteScheduledMedia(!deleteScheduledMedia)}>
+                                    <div className={`w-11 h-6 rounded-full p-0.5 transition-all duration-300 ${deleteScheduledMedia ? 'bg-red-500 shadow-lg shadow-red-500/30' : 'bg-newTextColor/10'}`}>
+                                        <div className={`w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-md ${deleteScheduledMedia ? 'translate-x-5' : 'translate-x-0'}`}></div>
                                     </div>
                                     <div className="flex flex-col flex-1">
-                                        <label className="text-sm text-textColor/80 cursor-pointer font-medium group-hover:text-textColor transition-colors">
+                                        <label className="text-sm text-textColor/80 cursor-pointer font-medium group-hover:text-textColor transition-colors duration-200">
                                             Apagar mídias de posts já publicados
                                         </label>
                                         <span className="text-[10px] text-textColor/40">Isso removerá as mídias dos posts que já foram publicados ou que apresentaram erro nesta automação.</span>
@@ -311,17 +311,17 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                         </div>
 
                         {/* Botões de Ação */}
-                        <div className="flex justify-end gap-4 pt-6 border-t border-fifth/50 sticky bottom-0 bg-newBgColorInner pb-2">
+                        <div className="flex justify-end gap-4 pt-6 border-t border-newTextColor/10 sticky bottom-0 bg-newBgColorInner pb-2">
                             <Button
                                 onClick={onClose}
-                                className="bg-transparent border-2 border-fifth/50 text-textColor/70 hover:text-textColor hover:bg-fifth/30 hover:border-forth/50 transition-all px-6"
+                                className="bg-transparent border-2 border-newTextColor/10 text-textColor/70 hover:text-textColor hover:bg-newSettings hover:border-newTextColor/20 transition-all duration-200 px-6"
                             >
                                 Cancelar
                             </Button>
                             <Button
                                 onClick={handleSave}
                                 disabled={isSaving}
-                                className="bg-gradient-to-r from-forth to-forth/80 hover:from-forth hover:to-forth/90 shadow-[0_10px_20px_rgba(97,42,213,0.3)] hover:shadow-[0_15px_30px_rgba(97,42,213,0.4)] hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed px-8 font-bold"
+                                className="bg-gradient-to-r from-forth to-forth/80 hover:from-forth hover:to-forth/90 shadow-lg shadow-forth/30 hover:shadow-xl hover:shadow-forth/40 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed px-8 font-bold"
                             >
                                 {isSaving ? (
                                     <span className="flex items-center gap-2">
@@ -337,7 +337,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
 
                     {/* Coluna Direita - Calendário */}
                     <div className="w-[380px] flex flex-col gap-4">
-                        <div className="bg-sixth/20 rounded-2xl p-6 shadow-sm border border-black/10 dark:border-white/10">
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
                             <div className="flex flex-col gap-4 mb-6">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 bg-forth/10 rounded-lg">

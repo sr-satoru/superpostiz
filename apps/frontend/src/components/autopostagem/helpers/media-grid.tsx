@@ -22,7 +22,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ label, media, postType, on
     const filteredMedia = media.filter(m => m.postType === postType);
 
     return (
-        <div className="flex flex-col gap-3 p-4 border border-black/5 dark:border-white/5 rounded-xl bg-sixth/20 shadow-inner">
+        <div className="flex flex-col gap-3 p-4 border border-newTextColor/10 rounded-xl bg-newBgColorInner shadow-inner">
             <span className="text-xs font-bold text-textColor/60 uppercase tracking-wider">{label}</span>
             <div className="flex flex-wrap gap-3">
                 {filteredMedia.map((m, i) => (
@@ -42,9 +42,9 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ label, media, postType, on
                 ))}
                 <button
                     onClick={onAdd}
-                    className="w-20 h-20 border-2 border-dashed border-fifth/50 rounded-xl flex flex-col items-center justify-center gap-1 text-fifth hover:text-forth hover:border-forth hover:bg-forth/5 transition-all group"
+                    className="w-20 h-20 border-2 border-dashed border-forth/60 rounded-xl flex flex-col items-center justify-center gap-1 text-forth bg-forth/5 hover:bg-forth/10 hover:border-forth hover:shadow-lg hover:shadow-forth/30 hover:scale-105 transition-all duration-200 group"
                 >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform duration-200">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>

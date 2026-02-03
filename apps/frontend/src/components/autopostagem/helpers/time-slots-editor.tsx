@@ -23,7 +23,7 @@ export const TimeSlotsEditor: React.FC<TimeSlotsEditorProps> = ({ label, timeSlo
     };
 
     return (
-        <div className="flex flex-col gap-3 p-4 border border-black/5 dark:border-white/5 rounded-xl bg-sixth/20 shadow-inner">
+        <div className="flex flex-col gap-3 p-4 border border-newTextColor/10 rounded-xl bg-newBgColorInner shadow-inner">
             <span className="text-xs font-bold text-textColor/60 uppercase tracking-wider">{label}</span>
             <div className="flex flex-wrap gap-2 mb-3">
                 {timeSlots.map((time) => (
@@ -46,7 +46,7 @@ export const TimeSlotsEditor: React.FC<TimeSlotsEditorProps> = ({ label, timeSlo
                     type="time"
                     value={newTime}
                     onChange={(e) => setNewTime(e.target.value)}
-                    className="flex-1 bg-black/5 dark:bg-black/40 border border-black/5 dark:border-white/5 rounded-lg px-3 py-2 text-sm text-black dark:text-white outline-none focus:border-forth/50 focus:ring-4 focus:ring-forth/5 transition-all"
+                    className="flex-1 bg-newBgColorInner border border-newTextColor/10 rounded-lg px-3 py-2 text-sm text-textColor outline-none focus:border-forth/50 focus:ring-2 focus:ring-forth/20 transition-all duration-200 hover:border-newTextColor/20"
                 />
                 <Button
                     onClick={addTimeSlot}
