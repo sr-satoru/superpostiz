@@ -42,6 +42,11 @@ import { ThirdPartyService } from '@gitroom/nestjs-libraries/database/prisma/thi
 import { VideoManager } from '@gitroom/nestjs-libraries/videos/video.manager';
 import { FalService } from '@gitroom/nestjs-libraries/openai/fal.service';
 import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
+import { AutomationService } from '@gitroom/nestjs-libraries/database/prisma/automation/automation.service';
+import { AutomationRepository } from '@gitroom/nestjs-libraries/database/prisma/automation/automation.repository';
+import { AutomationSchedulingService } from '@gitroom/nestjs-libraries/database/prisma/automation/automation.scheduling.service';
+import { AutomationMediaService } from '@gitroom/nestjs-libraries/database/prisma/automation/automation.media.service';
+import { AutomationHelperService } from '@gitroom/nestjs-libraries/database/prisma/automation/helpers/automation.helper';
 
 @Global()
 @Module({
@@ -93,9 +98,14 @@ import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integration
     ThirdPartyRepository,
     ThirdPartyService,
     VideoManager,
+    AutomationService,
+    AutomationRepository,
+    AutomationSchedulingService,
+    AutomationMediaService,
+    AutomationHelperService,
   ],
   get exports() {
     return this.providers;
   },
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

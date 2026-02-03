@@ -41,6 +41,7 @@ import { stripHtmlValidation } from '@gitroom/helpers/utils/strip.html.validatio
 dayjs.extend(utc);
 import * as Sentry from '@sentry/nestjs';
 import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
+import { AutomationRepository } from '@gitroom/nestjs-libraries/database/prisma/automation/automation.repository';
 
 type PostWithConditionals = Post & {
   integration?: Integration;
@@ -62,7 +63,8 @@ export class PostsService {
     private _shortLinkService: ShortLinkService,
     private _webhookService: WebhooksService,
     private openaiService: OpenaiService,
-    private _refreshIntegrationService: RefreshIntegrationService
+    private _refreshIntegrationService: RefreshIntegrationService,
+    private _automationRepository: AutomationRepository
   ) { }
 
   checkPending15minutesBack() {
@@ -508,6 +510,29 @@ export class PostsService {
           JSON.parse(newPosts[0].settings || '{}')
         );
       } catch (err) { }
+
+      if (newPosts[0].automationId) {
+        try {
+          const automation = await this._automationRepository.getAutomationById(
+            integration.organizationId,
+            newPosts[0].automationId
+          ) as any;
+          if (automation?.deleteMediaAfterPost) {
+            const images = JSON.parse(newPosts[0].image || '[]');
+            for (const image of images) {
+              if (image.path) {
+                try {
+                  await this.storage.removeFile(image.path);
+                  await this._automationRepository.deleteMediaByPath(
+                    integration.organizationId,
+                    image.path
+                  );
+                } catch (e) { }
+              }
+            }
+          }
+        } catch (e) { }
+      }
 
       return {
         postId: publishedPosts[0].postId,
