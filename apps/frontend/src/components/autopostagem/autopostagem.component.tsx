@@ -52,7 +52,7 @@ export const AutopostagemComponent: React.FC = () => {
             const endDate = new Date();
             endDate.setDate(endDate.getDate() + 30);
 
-            const response = await fetch(`/automation/${automationId}/generate-schedules`, {
+            const response = await fetch(`/automation/${automationId}/schedule`, {
                 method: 'POST',
                 body: JSON.stringify({
                     startDate: startDate.toISOString(),
