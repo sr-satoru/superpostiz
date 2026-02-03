@@ -22,6 +22,18 @@ export class PostContent {
   @IsString()
   id: string;
 
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsNumber()
+  delay?: number;
+
   @IsArray()
   @Type(() => MediaDto)
   @ValidateNested({ each: true })
@@ -44,6 +56,14 @@ export class Post {
   @IsOptional()
   @IsString()
   group: string;
+
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 
   @ValidateNested()
   @Type(() => EmptySettings, {
@@ -70,6 +90,10 @@ export class CreatePostDto {
   @IsDefined()
   @IsIn(['draft', 'schedule', 'now'])
   type: 'draft' | 'schedule' | 'now';
+
+  @IsOptional()
+  @IsString()
+  automationId?: string;
 
   @IsOptional()
   @IsString()

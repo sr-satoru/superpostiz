@@ -88,7 +88,7 @@ export class AutomationRepository {
         return this._tx.model.$transaction(async (tx) => {
             const automation = id
                 ? await tx.automation.update({
-                    where: { id },
+                    where: { id, organizationId: orgId },
                     data: automationData,
                 })
                 : await tx.automation.create({
@@ -144,6 +144,7 @@ export class AutomationRepository {
                 organizationId: orgId,
             },
             include: {
+                organization: true,
                 integrations: {
                     include: {
                         integration: true,
@@ -283,7 +284,16 @@ export class AutomationRepository {
         const paths = posts.flatMap((post) => {
             try {
                 const images = JSON.parse(post.image || '[]');
-                return images.map((img: any) => img.path).filter(Boolean);
+                return images.map((img: any) => {
+                    const path = img.path || '';
+                    if (path.startsWith('http')) {
+                        // Se for URL local, pega só o path após /uploads
+                        if (path.includes('/uploads/')) {
+                            return path.split('/uploads/')[1];
+                        }
+                    }
+                    return path;
+                }).filter(Boolean);
             } catch (e) {
                 return [];
             }
@@ -293,10 +303,13 @@ export class AutomationRepository {
     }
 
     async deleteMediaByPath(orgId: string, path: string) {
+        // Tenta deletar tanto o path relativo quanto o absoluto (URL) se existir no banco
         return this._media.model.media.deleteMany({
             where: {
-                path,
-                organizationId: orgId,
+                OR: [
+                    { path, organizationId: orgId },
+                    { path: { contains: path }, organizationId: orgId }
+                ]
             },
         });
     }

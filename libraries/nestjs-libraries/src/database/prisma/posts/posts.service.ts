@@ -522,7 +522,11 @@ export class PostsService {
             for (const image of images) {
               if (image.path) {
                 try {
-                  await this.storage.removeFile(image.path);
+                  const pathToDelete = image.path.startsWith('http') && image.path.includes('/uploads/')
+                    ? process.env.UPLOAD_DIRECTORY + '/' + image.path.split('/uploads/')[1]
+                    : image.path;
+
+                  await this.storage.removeFile(pathToDelete);
                   await this._automationRepository.deleteMediaByPath(
                     integration.organizationId,
                     image.path
@@ -679,7 +683,8 @@ export class PostsService {
             : body.date,
           post,
           body.tags,
-          body.inter
+          body.inter,
+          body.automationId
         );
 
       if (!posts?.length) {

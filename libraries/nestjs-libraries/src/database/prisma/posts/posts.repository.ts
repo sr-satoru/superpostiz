@@ -366,10 +366,11 @@ export class PostsRepository {
     date: string,
     body: PostBody,
     tags: { value: string; label: string }[],
-    inter?: number
+    inter?: number,
+    automationId?: string
   ) {
     const posts: Post[] = [];
-    const uuid = uuidv4();
+    const uuid = body.group || uuidv4();
 
     for (const value of body.value) {
       const updateData = (type: 'create' | 'update') => ({
@@ -380,6 +381,13 @@ export class PostsRepository {
             organizationId: orgId,
           },
         },
+        ...(automationId ? {
+          automation: {
+            connect: {
+              id: automationId,
+            }
+          }
+        } : {}),
         ...(posts?.[posts.length - 1]?.id
           ? {
             parentPost: {
@@ -396,6 +404,9 @@ export class PostsRepository {
             }
             : {}),
         content: value.content,
+        title: value.title || body.title || null,
+        description: value.description || body.description || null,
+        delay: value.delay || 0,
         group: uuid,
         intervalInDays: inter ? +inter : null,
         approvedSubmitForOrder: APPROVED_SUBMIT_FOR_ORDER.NO,

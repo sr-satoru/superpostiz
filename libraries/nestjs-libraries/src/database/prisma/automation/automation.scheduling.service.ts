@@ -285,7 +285,7 @@ export class AutomationSchedulingService {
             type: 'schedule' as const,
             date,
             order: '',
-            shortLink: true,
+            shortLink: (automation.organization as any)?.shortlink === 'YES' || (automation.organization as any)?.shortlink === 'ASK',
             tags: [],
             automationId: automation.id,
             posts: integrations.map((integrationId: string) => ({
