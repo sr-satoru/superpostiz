@@ -173,19 +173,15 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
             isOpen={isOpen}
             onClose={onClose}
             title={editAutopostId ? 'Editar Automação' : 'Criar Automação'}
-            size="80%"
-            className="max-w-[1400px]"
+            className="w-[100%] max-w-[1400px]"
         >
             {isLoading ? (
                 <div className="p-12 text-center">
-                    <div className="relative w-16 h-16 mx-auto mb-6">
-                        <div className="absolute inset-0 border-4 border-forth/20 rounded-full"></div>
-                        <div className="absolute inset-0 border-4 border-forth border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                    <p className="text-textColor/70 font-medium animate-pulse">Carregando automação...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forth mx-auto"></div>
+                    <p className="mt-4 text-textColor/60">Carregando...</p>
                 </div>
             ) : (
-                <div className="flex gap-6 max-h-[75vh]">
+                <div className="flex flex-col lg:flex-row gap-6 max-h-[75vh]">
                     {/* Coluna Esquerda - Formulário */}
                     <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-3 scrollbar scrollbar-thumb-fifth scrollbar-track-transparent">
                         {/* Nome da Automação */}
@@ -336,7 +332,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                     </div>
 
                     {/* Coluna Direita - Calendário */}
-                    <div className="w-[380px] flex flex-col gap-4">
+                    <div className="hidden lg:flex lg:w-[380px] flex-col gap-4">
                         <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
                             <div className="flex flex-col gap-4 mb-6">
                                 <div className="flex items-center gap-3">

@@ -11,6 +11,7 @@ interface ModalProps {
     closeOnClickOutside?: boolean;
     closeOnEscape?: boolean;
     size?: string;
+    height?: string;
     className?: string;
 }
 
@@ -23,6 +24,7 @@ export const Modal: React.FC<ModalProps> = ({
     closeOnClickOutside = true,
     closeOnEscape = true,
     size,
+    height,
     className,
 }) => {
     useEffect(() => {
@@ -58,10 +60,11 @@ export const Modal: React.FC<ModalProps> = ({
             style={{ zIndex: 9999 }}
         >
             <div
-                className={`gap-[40px] p-[32px] bg-newBgColorInner flex flex-col rounded-[24px] relative shadow-[0_20px_50px_rgba(0,0,0,0.5)] ${size ? '' : 'min-w-[600px]'} ${className || ''}`}
+                className={`gap-[40px] p-[32px] bg-newBgColorInner flex flex-col rounded-[24px] relative shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-auto ${className || ''}`}
                 style={{
                     width: size || undefined,
-                    maxHeight: '90vh',
+                    height: height || undefined,
+                    maxHeight: height || '90vh',
                     maxWidth: '100%'
                 }}
                 onClick={(e) => e.stopPropagation()}
