@@ -124,6 +124,10 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                 onSaved?.();
                 onClose();
                 toaster.show(editAutopostId ? t('automation_updated_successfully', 'Automação atualizada com sucesso!') : t('automation_created_successfully', 'Automação criada com sucesso!'), 'success');
+                if (deleteScheduledMedia) {
+                    toaster.show(t('media_deleted_successfully', 'Mídias físicas apagadas com sucesso!'), 'success');
+                    setDeleteScheduledMedia(false);
+                }
             } else {
                 toaster.show(t('error_saving_automation', 'Erro ao salvar automação'), 'warning');
             }

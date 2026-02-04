@@ -110,13 +110,25 @@ export class AutomationRepository {
                 })),
             });
 
-            await tx.automationMedia.createMany({
-                data: media.map((m) => ({
-                    automationId: automation.id,
-                    mediaId: m.id,
-                    postType: m.postType,
+            const existingMedia = await tx.media.findMany({
+                where: {
+                    id: { in: media.map((m) => m.id) },
                     organizationId: orgId,
-                })),
+                },
+                select: { id: true },
+            });
+
+            const existingMediaSet = new Set(existingMedia.map((m) => m.id));
+
+            await tx.automationMedia.createMany({
+                data: media
+                    .filter((m) => existingMediaSet.has(m.id))
+                    .map((m) => ({
+                        automationId: automation.id,
+                        mediaId: m.id,
+                        postType: m.postType,
+                        organizationId: orgId,
+                    })),
             });
 
             await tx.automationCaption.createMany({
