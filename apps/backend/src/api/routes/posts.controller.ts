@@ -35,7 +35,7 @@ export class PostsController {
     private _messagesService: MessagesService,
     private _agentGraphService: AgentGraphService,
     private _shortLinkService: ShortLinkService
-  ) {}
+  ) { }
 
   @Get('/:id/statistics')
   async getStatistics(
@@ -99,6 +99,7 @@ export class PostsController {
 
     return {
       posts,
+      comments: [], // Frontend espera este campo
     };
   }
 
