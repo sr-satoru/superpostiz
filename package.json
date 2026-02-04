@@ -258,7 +258,7 @@
     "@swc/core": "1.5.7",
     "@tailwindcss/vite": "^4.0.17",
     "@testing-library/react": "15.0.6",
-    "@types/cache-manager-redis-store": "^2.0.4",
+    "@types/cache-manager-redis-store": "^3.0.0",
     "@types/chrome": "^0.0.319",
     "@types/cookie-parser": "^1.4.6",
     "@types/jest": "29.5.12",
