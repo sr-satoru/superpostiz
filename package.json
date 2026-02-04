@@ -122,7 +122,7 @@
     "@types/remove-markdown": "^0.3.4",
     "@types/sha256": "^0.2.2",
     "@types/stripe": "^8.0.417",
-    "@types/striptags": "^0.0.5",
+    "@types/striptags": "^3.1.1",
     "@types/yup": "^0.32.0",
     "@uidotdev/usehooks": "^2.4.1",
     "@uiw/react-md-editor": "^4.0.3",
