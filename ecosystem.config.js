@@ -1,0 +1,40 @@
+module.exports = {
+    apps: [
+        {
+            name: 'frontend',
+            script: 'pnpm',
+            args: 'start',
+            cwd: './apps/frontend',
+            instances: 1,
+            autorestart: true,
+            watch: false,
+        },
+        {
+            name: 'backend',
+            script: 'pnpm',
+            args: 'start',
+            cwd: './apps/backend',
+            instances: 1,
+            autorestart: true,
+            watch: false,
+        },
+        {
+            name: 'workers',
+            script: 'pnpm',
+            args: 'start',
+            cwd: './apps/workers',
+            instances: 1,
+            autorestart: true,
+            watch: false,
+        },
+        {
+            name: 'cron',
+            script: 'pnpm',
+            args: 'start',
+            cwd: './apps/cron',
+            instances: 1,
+            autorestart: true,
+            watch: false,
+        },
+    ],
+};
