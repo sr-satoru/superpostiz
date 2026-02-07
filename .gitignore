@@ -1,6 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-uploads
+superpostiz
 # compiled output
 dist
 tmp
@@ -42,7 +42,7 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
-
+uploads
 # Next.js
 .next
 

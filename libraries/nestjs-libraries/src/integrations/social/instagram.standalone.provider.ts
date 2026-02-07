@@ -131,7 +131,17 @@ export class InstagramStandaloneProvider
       )
     ).json();
 
-    this.checkScopes(this.scopes, getAccessToken.permissions);
+    // Tentar validar permissões, mas permitir continuar mesmo se retornar vazio
+    try {
+      this.checkScopes(this.scopes, getAccessToken.permissions);
+    } catch (error) {
+      // Se a validação de permissões falhar, apenas registrar um aviso
+      // mas permitir que o token seja adicionado mesmo assim
+      console.warn(
+        '[Instagram Standalone] Permissões vazias ou incompletas, mas permitindo adicionar token:',
+        getAccessToken.permissions
+      );
+    }
 
     const { user_id, name, username, profile_picture_url } = await (
       await fetch(
