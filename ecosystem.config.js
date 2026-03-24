@@ -11,12 +11,13 @@ module.exports = {
         },
         {
             name: 'backend',
-            script: 'pnpm',
-            args: 'start',
+            script: 'dist/apps/backend/src/main.js',
             cwd: './apps/backend',
-            instances: 1,
-            autorestart: true,
-            watch: false,
+            interpreter_args: '--experimental-require-module',
+            node_args: '-r ../../node_modules/dotenv/config',
+            env: {
+                DOTENV_CONFIG_PATH: '../../.env'
+            }
         },
         {
             name: 'workers',
