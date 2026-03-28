@@ -66,7 +66,7 @@ model TagsPosts {
   tagId     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   tag       Tags     @relation(fields: [tagId], references: [id])
 
   @@id([postId, tagId])
@@ -376,7 +376,7 @@ model Comments {
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   organization   Organization @relation(fields: [organizationId], references: [id])
-  post           Post         @relation(fields: [postId], references: [id])
+  post           Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id])
 
   @@index([createdAt])
@@ -417,7 +417,7 @@ model Post {
   integration                Integration               @relation(fields: [integrationId], references: [id])
   lastMessage                Messages?                 @relation(fields: [lastMessageId], references: [id])
   organization               Organization              @relation("organization", fields: [organizationId], references: [id])
-  parentPost                 Post?                     @relation("parentPostId", fields: [parentPostId], references: [id])
+  parentPost                 Post?                     @relation("parentPostId", fields: [parentPostId], references: [id], onDelete: Cascade)
   childrenPost               Post[]                    @relation("parentPostId")
   submittedForOrder          Orders?                   @relation(fields: [submittedForOrderId], references: [id])
   submittedForOrganization   Organization?             @relation("submittedForOrg", fields: [submittedForOrganizationId], references: [id])
@@ -486,7 +486,7 @@ model PayoutProblems {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   order     Orders   @relation(fields: [orderId], references: [id])
-  post      Post?    @relation(fields: [postId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id])
 }
 
@@ -664,7 +664,7 @@ model Errors {
   postId         String
   body           String       @default("{}")
   organization   Organization @relation(fields: [organizationId], references: [id])
-  post           Post         @relation(fields: [postId], references: [id])
+  post           Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([createdAt])

@@ -79,6 +79,13 @@ export const AutopostagemComponent: React.FC = () => {
     }, [fetch, t, toaster, decision, mutate]);
 
     const handleDelete = useCallback(async (automationId: string) => {
+        const deletePosts = await decision.open({
+            title: t('delete_associated_posts', 'Apagar Posts Associados'),
+            description: t('delete_associated_posts_question', 'Deseja apagar todos os posts já publicados ou agendados vinculados a esta automação?'),
+            approveLabel: t('yes_delete_posts', 'Sim, apagar posts'),
+            cancelLabel: t('no_keep_posts', 'Não, manter posts'),
+        });
+
         if (!(await decision.open({
             title: t('delete_automation', 'Excluir Automação'),
             description: t('delete_automation_confirmation', 'Tem certeza que deseja excluir esta automação?'),
@@ -89,7 +96,7 @@ export const AutopostagemComponent: React.FC = () => {
         }
 
         try {
-            const response = await fetch(`/automation/${automationId}`, {
+            const response = await fetch(`/automation/${automationId}?deletePosts=${deletePosts}`, {
                 method: 'DELETE',
             });
 

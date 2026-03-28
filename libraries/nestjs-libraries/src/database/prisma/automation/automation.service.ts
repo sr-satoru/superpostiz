@@ -46,8 +46,8 @@ export class AutomationService {
         return this._automationRepository.createAutomation(orgId, data, id);
     }
 
-    async deleteAutomation(orgId: string, id: string) {
-        return this._automationRepository.deleteAutomation(orgId, id);
+    async deleteAutomation(orgId: string, id: string, deletePosts = false) {
+        return this._automationRepository.deleteAutomation(orgId, id, deletePosts);
     }
 
     async deleteAutomationSchedules(orgId: string, id: string) {

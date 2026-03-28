@@ -143,9 +143,23 @@ export class AutomationRepository {
         });
     }
 
-    async deleteAutomation(orgId: string, id: string) {
-        return this._automation.model.automation.delete({
-            where: { id, organizationId: orgId },
+    async deleteAutomation(orgId: string, id: string, deletePosts = false) {
+        return this._tx.model.$transaction(async (tx) => {
+            if (!deletePosts) {
+                await tx.post.updateMany({
+                    where: {
+                        automationId: id,
+                        organizationId: orgId,
+                    },
+                    data: {
+                        automationId: null,
+                    },
+                });
+            }
+
+            return tx.automation.delete({
+                where: { id, organizationId: orgId },
+            });
         });
     }
 

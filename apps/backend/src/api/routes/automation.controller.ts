@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
 } from '@nestjs/common';
 import { GetOrgFromRequest } from '@gitroom/nestjs-libraries/user/org.from.request';
 import { Organization } from '@prisma/client';
@@ -60,9 +61,10 @@ export class AutomationController {
     @CheckPolicies([AuthorizationActions.Delete, Sections.POSTS_PER_MONTH])
     async deleteAutomation(
         @GetOrgFromRequest() org: Organization,
-        @Param('id') id: string
+        @Param('id') id: string,
+        @Query('deletePosts') deletePosts?: string
     ) {
-        return this._automationService.deleteAutomation(org.id, id);
+        return this._automationService.deleteAutomation(org.id, id, deletePosts === 'true');
     }
 
     @Post('/:id/schedule')
