@@ -9,9 +9,15 @@ import { OpenaiService } from '@gitroom/nestjs-libraries/openai/openai.service';
 import { ExtractContentService } from '@gitroom/nestjs-libraries/openai/extract.content.service';
 import { CodesService } from '@gitroom/nestjs-libraries/services/codes.service';
 import { PublicIntegrationsController } from '@gitroom/backend/public-api/routes/v1/public.integrations.controller';
+import { PublicAutomationController } from '@gitroom/backend/public-api/routes/v1/public.automation.controller';
+import { PublicAutomationV2Controller } from '@gitroom/backend/public-api/routes/v2/public.automation.v2.controller';
 import { PublicAuthMiddleware } from '@gitroom/backend/services/auth/public.auth.middleware';
 
-const authenticatedController = [PublicIntegrationsController];
+const authenticatedController = [
+  PublicIntegrationsController,
+  PublicAutomationController,
+  PublicAutomationV2Controller,
+];
 @Module({
   imports: [UploadModule],
   controllers: [...authenticatedController],
