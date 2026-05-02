@@ -239,6 +239,7 @@ export class IntegrationRepository {
           ? { additionalSettings: JSON.stringify(additionalSettings) }
           : {}),
         ...(customInstanceDetails ? { customInstanceDetails } : {}),
+        name: name,
         type: type as any,
         ...(!refresh
           ? {
