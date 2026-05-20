@@ -21,9 +21,9 @@ export async function middleware(request: NextRequest) {
   const lng = request.cookies.has(cookieName)
     ? acceptLanguage.get(request.cookies.get(cookieName).value)
     : acceptLanguage.get(
-        request.headers.get('Accept-Language') ||
-          request.headers.get('accept-language')
-      );
+      request.headers.get('Accept-Language') ||
+      request.headers.get('accept-language')
+    );
 
   const topResponse = NextResponse.next();
 
@@ -38,7 +38,9 @@ export async function middleware(request: NextRequest) {
   if (
     nextUrl.pathname.startsWith('/uploads/') ||
     nextUrl.pathname.startsWith('/p/') ||
-    nextUrl.pathname.startsWith('/icons/')
+    nextUrl.pathname.startsWith('/icons/') ||
+    nextUrl.pathname.startsWith('/terms') ||
+    nextUrl.pathname.startsWith('/privacy')
   ) {
     return topResponse;
   }
@@ -51,10 +53,10 @@ export async function middleware(request: NextRequest) {
       path: '/',
       ...(!process.env.NOT_SECURED
         ? {
-            secure: true,
-            httpOnly: true,
-            sameSite: false,
-          }
+          secure: true,
+          httpOnly: true,
+          sameSite: false,
+        }
         : {}),
       maxAge: -1,
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
@@ -70,12 +72,12 @@ export async function middleware(request: NextRequest) {
     const additional = !findIndex
       ? ''
       : (url.indexOf('?') > -1 ? '&' : '?') +
-        `provider=${(findIndex === 'settings'
-          ? process.env.POSTIZ_GENERIC_OAUTH
-            ? 'generic'
-            : 'github'
-          : findIndex
-        ).toUpperCase()}`;
+      `provider=${(findIndex === 'settings'
+        ? process.env.POSTIZ_GENERIC_OAUTH
+          ? 'generic'
+          : 'github'
+        : findIndex
+      ).toUpperCase()}`;
     return NextResponse.redirect(
       new URL(`/auth${url}${additional}`, nextUrl.href)
     );
@@ -91,12 +93,12 @@ export async function middleware(request: NextRequest) {
       redirect.cookies.set('org', org, {
         ...(!process.env.NOT_SECURED
           ? {
-              path: '/',
-              secure: true,
-              httpOnly: true,
-              sameSite: false,
-              domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
-            }
+            path: '/',
+            secure: true,
+            httpOnly: true,
+            sameSite: false,
+            domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+          }
           : {}),
         expires: new Date(Date.now() + 15 * 60 * 1000),
       });
@@ -121,12 +123,12 @@ export async function middleware(request: NextRequest) {
         redirect.cookies.set('showorg', id, {
           ...(!process.env.NOT_SECURED
             ? {
-                path: '/',
-                secure: true,
-                httpOnly: true,
-                sameSite: false,
-                domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
-              }
+              path: '/',
+              secure: true,
+              httpOnly: true,
+              sameSite: false,
+              domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+            }
             : {}),
           expires: new Date(Date.now() + 15 * 60 * 1000),
         });
