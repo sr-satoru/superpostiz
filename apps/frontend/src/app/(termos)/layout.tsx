@@ -1,15 +1,9 @@
 import { ReactNode } from 'react';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { jakartaSans } from '@gitroom/frontend/fonts/plus-jakarta-sans/plus.jakarta.sans.font';
 import clsx from 'clsx';
 import Link from 'next/link';
 import '../global.scss';
 import './termos.scss';
-
-const jakartaSans = Plus_Jakarta_Sans({
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-});
 
 export default function TermosLayout({ children }: { children: ReactNode }) {
   return (
