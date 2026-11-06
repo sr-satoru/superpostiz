@@ -3,9 +3,8 @@ ARG NEXT_PUBLIC_VERSION
 ENV NEXT_PUBLIC_VERSION=$NEXT_PUBLIC_VERSION
 RUN apk add --no-cache g++ make py3-pip bash nginx
 RUN adduser -D -g 'www' www
-RUN mkdir /www
-RUN chown -R www:www /var/lib/nginx
-RUN chown -R www:www /www
+RUN mkdir -p /www /run/nginx /uploads
+RUN chown -R www:www /var/lib/nginx /run/nginx /uploads /www
 
 
 RUN npm --no-update-notifier --no-fund --global install pnpm@10.6.1 pm2

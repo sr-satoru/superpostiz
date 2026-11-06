@@ -4,8 +4,14 @@ name: "Build Containers"
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     tags:
       - '*'
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-containers-common:
