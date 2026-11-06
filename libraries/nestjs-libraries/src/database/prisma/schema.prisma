@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -195,7 +195,7 @@ model Star {
   forks      Int
   totalForks Int
   login      String
-  date       DateTime @default(now())
+  date       DateTime @default(now()) @db.Date
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -696,15 +696,15 @@ model mastra_ai_spans {
   input        Json?
   output       Json?
   error        Json?
-  startedAt    DateTime 
-  endedAt      DateTime?
-  createdAt    DateTime 
-  updatedAt    DateTime?
+  startedAt    DateTime  @db.Timestamp(6)
+  endedAt      DateTime? @db.Timestamp(6)
+  createdAt    DateTime  @db.Timestamp(6)
+  updatedAt    DateTime? @db.Timestamp(6)
   isEvent      Boolean
-  startedAtZ   DateTime? @default(now())
-  endedAtZ     DateTime? @default(now())
-  createdAtZ   DateTime? @default(now())
-  updatedAtZ   DateTime? @default(now())
+  startedAtZ   DateTime? @default(now()) @db.Timestamptz(6)
+  endedAtZ     DateTime? @default(now()) @db.Timestamptz(6)
+  createdAtZ   DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAtZ   DateTime? @default(now()) @db.Timestamptz(6)
 
   @@index([name], map: "public_mastra_ai_spans_name_idx")
   @@index([parentSpanId, startedAt(sort: Desc)], map: "public_mastra_ai_spans_parentspanid_startedat_idx")
@@ -724,10 +724,10 @@ model mastra_evals {
   test_info     Json?
   global_run_id String
   run_id        String
-  created_at    DateTime 
-  createdAt     DateTime?
-  created_atZ   DateTime? @default(now())
-  createdAtZ    DateTime? @default(now())
+  created_at    DateTime  @db.Timestamp(6)
+  createdAt     DateTime? @db.Timestamp(6)
+  created_atZ   DateTime? @default(now()) @db.Timestamptz(6)
+  createdAtZ    DateTime? @default(now()) @db.Timestamptz(6)
 
   @@index([agent_name, created_at(sort: Desc)], map: "public_mastra_evals_agent_name_created_at_idx")
   @@ignore
@@ -739,9 +739,9 @@ model mastra_messages {
   content    String
   role       String
   type       String
-  createdAt  DateTime 
+  createdAt  DateTime  @db.Timestamp(6)
   resourceId String?
-  createdAtZ DateTime? @default(now())
+  createdAtZ DateTime? @default(now()) @db.Timestamptz(6)
 
   @@index([thread_id, createdAt(sort: Desc)], map: "public_mastra_messages_thread_id_createdat_idx")
 }
@@ -750,10 +750,10 @@ model mastra_resources {
   id            String    @id
   workingMemory String?
   metadata      Json?
-  createdAt     DateTime 
-  updatedAt     DateTime 
-  createdAtZ    DateTime? @default(now())
-  updatedAtZ    DateTime? @default(now())
+  createdAt     DateTime  @db.Timestamp(6)
+  updatedAt     DateTime  @db.Timestamp(6)
+  createdAtZ    DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAtZ    DateTime? @default(now()) @db.Timestamptz(6)
 }
 
 model mastra_scorers {
@@ -784,10 +784,10 @@ model mastra_scorers {
   source               String
   resourceId           String?
   threadId             String?
-  createdAt            DateTime 
-  updatedAt            DateTime 
-  createdAtZ           DateTime? @default(now())
-  updatedAtZ           DateTime? @default(now())
+  createdAt            DateTime  @db.Timestamp(6)
+  updatedAt            DateTime  @db.Timestamp(6)
+  createdAtZ           DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAtZ           DateTime? @default(now()) @db.Timestamptz(6)
   spanId               String?
 
   @@index([traceId, spanId, createdAt(sort: Desc)], map: "public_mastra_scores_trace_id_span_id_created_at_idx")
@@ -798,10 +798,10 @@ model mastra_threads {
   resourceId String
   title      String
   metadata   String?
-  createdAt  DateTime 
-  updatedAt  DateTime 
-  createdAtZ DateTime? @default(now())
-  updatedAtZ DateTime? @default(now())
+  createdAt  DateTime  @db.Timestamp(6)
+  updatedAt  DateTime  @db.Timestamp(6)
+  createdAtZ DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAtZ DateTime? @default(now()) @db.Timestamptz(6)
 
   @@index([resourceId, createdAt(sort: Desc)], map: "public_mastra_threads_resourceid_createdat_idx")
 }
@@ -820,8 +820,8 @@ model mastra_traces {
   other        String?
   startTime    BigInt
   endTime      BigInt
-  createdAt    DateTime 
-  createdAtZ   DateTime? @default(now())
+  createdAt    DateTime  @db.Timestamp(6)
+  createdAtZ   DateTime? @default(now()) @db.Timestamptz(6)
 
   @@index([name, startTime(sort: Desc)], map: "public_mastra_traces_name_starttime_idx")
 }
@@ -831,10 +831,10 @@ model mastra_workflow_snapshot {
   run_id        String
   resourceId    String?
   snapshot      String
-  createdAt     DateTime 
-  updatedAt     DateTime 
-  createdAtZ    DateTime? @default(now())
-  updatedAtZ    DateTime? @default(now())
+  createdAt     DateTime  @db.Timestamp(6)
+  updatedAt     DateTime  @db.Timestamp(6)
+  createdAtZ    DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAtZ    DateTime? @default(now()) @db.Timestamptz(6)
 
   @@unique([workflow_name, run_id], map: "public_mastra_workflow_snapshot_workflow_name_run_id_key")
 }
