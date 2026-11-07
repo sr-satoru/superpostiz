@@ -11,7 +11,7 @@ export class InstagramBusinessAuthService {
     const configId = process.env.INSTAGRAM_CONFIG_ID;
 
     const url =
-      `https://www.facebook.com/${META_GRAPH_API_VERSION}/dialog/oauth?client_id=${clientId}` +
+      `https://www.facebook.com/dialog/oauth?client_id=${clientId}` +
       `&config_id=${configId}` +
       `&display=popup` +
       `&override_default_response_type=true` +
