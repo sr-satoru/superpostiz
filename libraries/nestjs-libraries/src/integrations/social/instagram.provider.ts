@@ -508,7 +508,7 @@ export class InstagramProvider
           type === 'graph.facebook.com' &&
           !isStory &&
           firstPost?.media?.length === 1 &&
-          hasExtension(m.path, 'mp4')
+          (hasExtension(m.path, 'mp4') || hasExtension(m.path, 'mov'))
             ? `&audio_configuration=${encodeURIComponent(
                 JSON.stringify({
                   audio_id: firstPost.settings.audio.id,

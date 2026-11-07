@@ -93,16 +93,28 @@ export default withProvider<InstagramDto>({
       if ((firstPost?.length ?? 0) > 1) {
         return 'Audio can only be added to a single video Reel';
       }
-      const hasVideo = firstPost?.some(
-        (f) => (f?.path?.indexOf?.('mp4') ?? -1) > -1
-      );
+      const hasVideo = firstPost?.some((f) => {
+        const path = f?.path?.toLowerCase() || '';
+        return (
+          path.includes('.mp4') ||
+          path.includes('.mov') ||
+          path.includes('.webm')
+        );
+      });
       if (!hasVideo) {
         return 'Audio can only be added to a video Reel';
       }
     }
     const checkVideosLength = await Promise.all(
       firstPost
-        ?.filter((f) => (f?.path?.indexOf?.('mp4') ?? -1) > -1)
+        ?.filter((f) => {
+          const path = f?.path?.toLowerCase() || '';
+          return (
+            path.includes('.mp4') ||
+            path.includes('.mov') ||
+            path.includes('.webm')
+          );
+        })
         ?.flatMap((p) => p?.path)
         ?.map((p) => {
           return new Promise<number>((res) => {
