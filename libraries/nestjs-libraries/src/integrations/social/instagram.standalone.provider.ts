@@ -4,7 +4,8 @@ import {
   PostResponse,
   SocialProvider,
 } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+import { makeSecureId } from '@gitroom/nestjs-libraries/services/make.secure.id';
+import { META_GRAPH_API_VERSION } from '@gitroom/nestjs-libraries/integrations/social/facebook.provider';
 import dayjs from 'dayjs';
 import { SocialAbstract } from '@gitroom/nestjs-libraries/integrations/social.abstract';
 import { InstagramDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/instagram.dto';
@@ -60,7 +61,7 @@ export class InstagramStandaloneProvider
       profile_picture_url = '',
     } = await (
       await fetch(
-        `https://graph.instagram.com/v21.0/me?fields=user_id,username,name,profile_picture_url&access_token=${access_token}`
+        `https://graph.instagram.com/${META_GRAPH_API_VERSION}/me?fields=user_id,username,name,profile_picture_url&access_token=${access_token}`
       )
     ).json();
 
@@ -69,14 +70,14 @@ export class InstagramStandaloneProvider
       name,
       accessToken: access_token,
       refreshToken: access_token,
-      expiresIn: dayjs().add(59, 'days').unix() - dayjs().unix(),
+      expiresIn: dayjs().add(58, 'days').unix() - dayjs().unix(),
       picture: profile_picture_url || '',
       username,
     };
   }
 
   async generateAuthUrl() {
-    const state = makeId(6);
+    const state = makeSecureId(6);
     return {
       url:
         `https://www.instagram.com/oauth/authorize?enable_fb_login=0&client_id=${
@@ -90,7 +91,7 @@ export class InstagramStandaloneProvider
         )}&response_type=code&scope=${encodeURIComponent(
           this.scopes.join(',')
         )}` + `&state=${state}`,
-      codeVerifier: makeId(10),
+      codeVerifier: makeSecureId(10),
       state,
     };
   }
@@ -121,6 +122,16 @@ export class InstagramStandaloneProvider
       })
     ).json();
 
+    if (!getAccessToken.access_token) {
+      console.error(
+        'Instagram standalone token exchange failed:',
+        JSON.stringify(getAccessToken)
+      );
+      throw new Error(
+        getAccessToken.error_message || 'Instagram token exchange failed'
+      );
+    }
+
     const { access_token, expires_in, ...all } = await (
       await fetch(
         'https://graph.instagram.com/access_token' +
@@ -145,7 +156,7 @@ export class InstagramStandaloneProvider
 
     const { user_id, name, username, profile_picture_url } = await (
       await fetch(
-        `https://graph.instagram.com/v21.0/me?fields=user_id,username,name,profile_picture_url&access_token=${access_token}`
+        `https://graph.instagram.com/${META_GRAPH_API_VERSION}/me?fields=user_id,username,name,profile_picture_url&access_token=${access_token}`
       )
     ).json();
 
@@ -154,7 +165,7 @@ export class InstagramStandaloneProvider
       name,
       accessToken: access_token,
       refreshToken: access_token,
-      expiresIn: dayjs().add(59, 'days').unix() - dayjs().unix(),
+      expiresIn: dayjs().add(58, 'days').unix() - dayjs().unix(),
       picture: profile_picture_url,
       username,
     };
