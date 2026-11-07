@@ -24,8 +24,38 @@ export class MediaService {
     private _videoManager: VideoManager
   ) {}
 
-  async deleteMedia(org: string, id: string) {
-    return this._mediaRepository.deleteMedia(org, id);
+  async deleteMedia(org: string, id: string, hardDelete = false) {
+    if (!hardDelete) {
+      return this._mediaRepository.deleteMedia(org, id);
+    }
+
+    const media = await this._mediaRepository.getMediaById(id);
+    if (!media || media.organizationId !== org) {
+      return null;
+    }
+
+    const removePhysicalFile = async (filePath?: string | null) => {
+      if (!filePath) return;
+      try {
+        const cleanPath = filePath.split('?')[0];
+        let pathToDelete = cleanPath;
+        if (cleanPath.startsWith('http') && cleanPath.includes('/uploads/')) {
+          pathToDelete = `${process.env.UPLOAD_DIRECTORY || ''}/${cleanPath.split('/uploads/')[1]}`;
+        } else if (!cleanPath.startsWith('/')) {
+          pathToDelete = `${process.env.UPLOAD_DIRECTORY || ''}/${cleanPath}`;
+        }
+        await this.storage.removeFile(pathToDelete);
+      } catch (err) {
+        console.error(`Error deleting physical file: ${filePath}`, err);
+      }
+    };
+
+    await removePhysicalFile(media.path);
+    if (media.thumbnail && media.thumbnail !== media.path) {
+      await removePhysicalFile(media.thumbnail);
+    }
+
+    return this._mediaRepository.hardDeleteMedia(org, id);
   }
 
   getMediaById(id: string) {

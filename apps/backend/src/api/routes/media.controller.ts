@@ -36,8 +36,12 @@ export class MediaController {
   ) {}
 
   @Delete('/:id')
-  deleteMedia(@GetOrgFromRequest() org: Organization, @Param('id') id: string) {
-    return this._mediaService.deleteMedia(org.id, id);
+  deleteMedia(
+    @GetOrgFromRequest() org: Organization,
+    @Param('id') id: string,
+    @Query('hardDelete') hardDelete?: string
+  ) {
+    return this._mediaService.deleteMedia(org.id, id, hardDelete === 'true');
   }
 
   @Post('/generate-video')

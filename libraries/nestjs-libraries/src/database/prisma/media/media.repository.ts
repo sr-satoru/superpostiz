@@ -4,7 +4,11 @@ import { SaveMediaInformationDto } from '@gitroom/nestjs-libraries/dtos/media/sa
 
 @Injectable()
 export class MediaRepository {
-  constructor(private _media: PrismaRepository<'media'>) {}
+  constructor(
+    private _media: PrismaRepository<'media'>,
+    private _user: PrismaRepository<'user'>,
+    private _socialMediaAgency: PrismaRepository<'socialMediaAgency'>
+  ) {}
 
   saveFile(org: string, fileName: string, filePath: string) {
     return this._media.model.media.create({
@@ -43,6 +47,24 @@ export class MediaRepository {
       },
       data: {
         deletedAt: new Date(),
+      },
+    });
+  }
+
+  async hardDeleteMedia(org: string, id: string) {
+    await this._user.model.user.updateMany({
+      where: { pictureId: id },
+      data: { pictureId: null },
+    });
+    await this._socialMediaAgency.model.socialMediaAgency.updateMany({
+      where: { logoId: id },
+      data: { logoId: null },
+    });
+
+    return this._media.model.media.delete({
+      where: {
+        id,
+        organizationId: org,
       },
     });
   }
