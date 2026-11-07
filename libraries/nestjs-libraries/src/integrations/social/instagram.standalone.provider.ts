@@ -13,6 +13,7 @@ import { InstagramDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-set
 import { InstagramProvider } from '@gitroom/nestjs-libraries/integrations/social/instagram.provider';
 import { Integration } from '@prisma/client';
 import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
+import { Tool } from '@gitroom/nestjs-libraries/integrations/tool.decorator';
 
 const instagramProvider = new InstagramProvider();
 
@@ -222,5 +223,31 @@ export class InstagramStandaloneProvider
       date,
       apiHost
     );
+  }
+
+  // https://developers.facebook.com/docs/instagram-platform/content-publishing/audio-api/
+  // empty search_query returns trending audio
+  @Tool({
+    description:
+      'Search audio (music or original sounds) to attach to a Reel via the "audio" setting, an empty query returns trending audio',
+    dataSchema: [
+      {
+        key: 'q',
+        type: 'string',
+        description: 'Search query, leave empty for trending audio',
+      },
+      {
+        key: 'type',
+        type: 'string',
+        description: 'Either "music" or "original_sound", defaults to "music"',
+      },
+    ],
+  })
+  async audioSearch(
+    token: string,
+    data: { q?: string; type?: 'music' | 'original_sound' },
+    internalId?: string
+  ) {
+    return instagramProvider.audioSearch(token, data, internalId);
   }
 }

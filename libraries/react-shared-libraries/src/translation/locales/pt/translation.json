@@ -535,5 +535,14 @@
   "billing_cancel_anytime_short": "Cancele a qualquer momento.",
   "billing_pay_0_start_trial": "Pague R$0 hoje - Comece seu teste gratuito!",
   "billing_pay_now": "Pagar agora",
-  "billing_per_month": "/ mês"
+  "billing_per_month": "/ mês",
+  "instagram_audio_label": "Áudio (Apenas Reels - vídeo único)",
+  "instagram_audio_facebook_login_only": "Disponível apenas no Instagram com Facebook Login",
+  "instagram_add_audio": "Adicionar áudio",
+  "instagram_audio_volume": "Volume do áudio",
+  "instagram_video_volume": "Volume do vídeo original",
+  "instagram_music": "Música",
+  "instagram_original_sound": "Áudio original",
+  "instagram_search_audio": "Buscar áudio (vazio mostra em alta)",
+  "instagram_no_audio_found": "Nenhum áudio encontrado"
 }
