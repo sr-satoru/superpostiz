@@ -514,6 +514,24 @@ export class IntegrationRepository {
     });
   }
 
+  getIntegrationByInternalId(org: string, internalId: string) {
+    return this._integration.model.integration.findFirst({
+      where: {
+        organizationId: org,
+        internalId,
+        deletedAt: null,
+      },
+    });
+  }
+
+  deleteIntegrationPermanently(id: string) {
+    return this._integration.model.integration.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
   async disableIntegrations(org: string, totalChannels: number) {
     const getChannels = await this._integration.model.integration.findMany({
       where: {

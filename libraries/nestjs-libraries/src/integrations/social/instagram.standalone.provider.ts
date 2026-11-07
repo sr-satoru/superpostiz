@@ -1,3 +1,4 @@
+import { instagramBusinessAuthService } from '@gitroom/nestjs-libraries/integrations/social/instagram.business.auth.service';
 import {
   AuthTokenDetails,
   PostDetails,
@@ -78,16 +79,26 @@ export class InstagramStandaloneProvider
 
   async generateAuthUrl() {
     const state = makeSecureId(6);
+    const redirectUri = `${
+      process?.env.FRONTEND_URL?.indexOf('https') == -1
+        ? `https://redirectmeto.com/${process?.env.FRONTEND_URL}`
+        : `${process?.env.FRONTEND_URL}`
+    }/integrations/social/instagram-standalone`;
+
+    if (process.env.INSTAGRAM_CONFIG_ID) {
+      return {
+        url: instagramBusinessAuthService.generateAuthUrl(state, redirectUri),
+        codeVerifier: makeSecureId(10),
+        state,
+      };
+    }
+
     return {
       url:
         `https://www.instagram.com/oauth/authorize?enable_fb_login=0&client_id=${
           process.env.INSTAGRAM_APP_ID
         }&redirect_uri=${encodeURIComponent(
-          `${
-            process?.env.FRONTEND_URL?.indexOf('https') == -1
-              ? `https://redirectmeto.com/${process?.env.FRONTEND_URL}`
-              : `${process?.env.FRONTEND_URL}`
-          }/integrations/social/instagram-standalone`
+          redirectUri
         )}&response_type=code&scope=${encodeURIComponent(
           this.scopes.join(',')
         )}` + `&state=${state}`,
@@ -101,6 +112,18 @@ export class InstagramStandaloneProvider
     codeVerifier: string;
     refresh: string;
   }) {
+    const redirectUri = `${
+      process?.env.FRONTEND_URL?.indexOf('https') == -1
+        ? `https://redirectmeto.com/${process?.env.FRONTEND_URL}`
+        : `${process?.env.FRONTEND_URL}`
+    }/integrations/social/instagram-standalone`;
+
+    if (process.env.INSTAGRAM_CONFIG_ID) {
+      return instagramBusinessAuthService.authenticate({
+        code: params.code,
+        redirectUri,
+      });
+    }
     const formData = new FormData();
     formData.append('client_id', process.env.INSTAGRAM_APP_ID!);
     formData.append('client_secret', process.env.INSTAGRAM_APP_SECRET!);

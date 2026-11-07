@@ -298,13 +298,34 @@ export class IntegrationService {
       data
     );
 
-    await this.checkForDeletedOnceAndUpdate(
+    const targetInternalId = String(getIntegrationInformation.id);
+    await this.checkForDeletedOnceAndUpdate(org, targetInternalId);
+
+    // Check if channel/page is already registered to avoid unique constraint error
+    const existing = await this._integrationRepository.getIntegrationByInternalId(
       org,
-      String(getIntegrationInformation.id)
+      targetInternalId
     );
+
+    if (existing && existing.id !== id) {
+      // Update existing integration with new tokens and profile info
+      await this._integrationRepository.updateIntegration(existing.id, {
+        picture: getIntegrationInformation.picture,
+        name: getIntegrationInformation.name,
+        token: getIntegrationInformation.access_token,
+        profile: getIntegrationInformation.username,
+        inBetweenSteps: false,
+        refreshNeeded: false,
+      });
+
+      // Remove the temporary intermediate integration record
+      await this._integrationRepository.deleteIntegrationPermanently(id);
+      return { success: true };
+    }
+
     await this._integrationRepository.updateIntegration(id, {
       picture: getIntegrationInformation.picture,
-      internalId: String(getIntegrationInformation.id),
+      internalId: targetInternalId,
       name: getIntegrationInformation.name,
       inBetweenSteps: false,
       token: getIntegrationInformation.access_token,
