@@ -909,6 +909,7 @@ model Automation {
   daysOfWeek     String                 // JSON array de dias da semana (ex: [0, 1, 2, 3, 4, 5, 6] onde 0 = Domingo, 6 = Sábado)
   deleteMediaAfterPost Boolean          @default(false)
   randomCaptions Boolean                @default(false)
+  audios         String?                // JSON array de áudios para Reels
   organizationId String
   createdAt      DateTime               @default(now())
   updatedAt      DateTime               @updatedAt

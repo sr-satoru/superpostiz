@@ -15,6 +15,7 @@ import { MediaGrid } from './helpers/media-grid';
 import { DaysSelector } from './helpers/days-selector';
 import { TimeSlotsEditor } from './helpers/time-slots-editor';
 import { CalendarAutomation } from './calendar/calendar-automation';
+import { AutomationAudioSelector, AutomationAudio } from './helpers/automation-audio-selector';
 
 interface CreateAutomationModalProps {
     isOpen: boolean;
@@ -54,6 +55,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
     const [deleteMediaAfterPost, setDeleteMediaAfterPost] = useState(false);
     const [randomCaptions, setRandomCaptions] = useState(false);
     const [deleteScheduledMedia, setDeleteScheduledMedia] = useState(false);
+    const [audios, setAudios] = useState<AutomationAudio[]>([]);
     const [selectedCalendarDates, setSelectedCalendarDates] = useState<Date[]>([]);
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -77,6 +79,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                     setStoryTimeSlots(data.storyTimeSlots || []);
                     setDeleteMediaAfterPost(data.deleteMediaAfterPost);
                     setRandomCaptions(data.randomCaptions || false);
+                    setAudios(data.audios || []);
                     setDeleteScheduledMedia(false); // Reset this as it's an action for the update
                 })
                 .finally(() => setIsLoading(false));
@@ -90,6 +93,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
             setStoryTimeSlots([]);
             setDeleteMediaAfterPost(false);
             setRandomCaptions(false);
+            setAudios([]);
             setDeleteScheduledMedia(false);
         }
     }, [editAutopostId, isOpen, fetch]);
@@ -113,6 +117,7 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                 deleteMediaAfterPost,
                 randomCaptions,
                 deleteScheduledMedia,
+                audios,
             };
 
             const res = await fetch(editAutopostId ? `/automation/${editAutopostId}` : '/automation', {
@@ -241,6 +246,16 @@ export const CreateAutomationModal: React.FC<CreateAutomationModalProps> = ({
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Áudios & Músicas para Reels */}
+                        <div className="bg-newSettings rounded-2xl p-6 border border-newTextColor/5 hover:border-newTextColor/10 transition-all duration-200">
+                            <AutomationAudioSelector
+                                audios={audios}
+                                onChange={setAudios}
+                                integrations={integrations}
+                                selectedIntegrations={selectedIntegrations}
+                            />
                         </div>
 
                         {/* Agendamento (Dias e Horários) */}

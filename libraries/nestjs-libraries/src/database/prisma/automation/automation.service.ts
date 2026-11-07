@@ -17,6 +17,7 @@ export class AutomationService {
             timeSlots: JSON.parse(automation.timeSlots),
             storyTimeSlots: automation.storyTimeSlots ? JSON.parse(automation.storyTimeSlots) : [],
             daysOfWeek: JSON.parse(automation.daysOfWeek),
+            audios: automation.audios ? JSON.parse(automation.audios) : [],
             pendingPostsCount: automation._count?.schedules || 0,
         }));
     }
@@ -31,6 +32,7 @@ export class AutomationService {
             timeSlots: JSON.parse(automation.timeSlots),
             storyTimeSlots: automation.storyTimeSlots ? JSON.parse(automation.storyTimeSlots) : [],
             daysOfWeek: JSON.parse(automation.daysOfWeek),
+            audios: automation.audios ? JSON.parse(automation.audios) : [],
             pendingPostsCount: automation._count?.schedules || 0,
         };
     }

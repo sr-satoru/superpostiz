@@ -218,6 +218,7 @@ export class AutomationSchedulingService {
             // Calculate starting index for sequential captions or find last index for random
             let postIndex = (automation as any)._count?.posts || 0;
             let lastCaptionIndex: number | undefined = undefined;
+            let videoPostIndex = 0;
 
             // Try to find the index of the last used caption to avoid immediate repetition in random mode
             const lastPost = (automation as any).posts?.[0];
@@ -233,6 +234,12 @@ export class AutomationSchedulingService {
             }
 
             for (const schedule of schedulesToCreate) {
+                const isVideo = schedule.mediaPath && (
+                    schedule.mediaPath.toLowerCase().includes('.mp4') ||
+                    schedule.mediaPath.toLowerCase().includes('.mov') ||
+                    schedule.mediaPath.toLowerCase().includes('.webm')
+                );
+
                 const { index: usedIndex } = await this.createPostFromAutomation(
                     orgId,
                     automation,
@@ -241,8 +248,13 @@ export class AutomationSchedulingService {
                     schedule.mediaPath,
                     schedule.automationMediaId,
                     postIndex++,
-                    lastCaptionIndex
+                    lastCaptionIndex,
+                    videoPostIndex
                 );
+
+                if (isVideo && schedule.postType !== 'story') {
+                    videoPostIndex++;
+                }
 
                 // Update lastCaptionIndex for the next iteration
                 lastCaptionIndex = usedIndex;
@@ -260,7 +272,8 @@ export class AutomationSchedulingService {
         mediaPath?: string,
         mediaId?: string,
         index: number = 0,
-        lastIndex?: number
+        lastIndex?: number,
+        videoPostIndex: number = 0
     ) {
         const group = makeId(10);
         const integrations = automation.integrations.map((i: any) => i.integrationId);
@@ -281,6 +294,29 @@ export class AutomationSchedulingService {
 
         const media = mediaItem ? [mediaItem] : [];
 
+        // Verifica se a mídia é um vídeo para anexar áudio com segurança (filtra imagens para não dar erro no Instagram)
+        const isVideo = mediaItem?.path && (
+            mediaItem.path.toLowerCase().includes('.mp4') ||
+            mediaItem.path.toLowerCase().includes('.mov') ||
+            mediaItem.path.toLowerCase().includes('.webm')
+        );
+        const isStory = postType === 'story';
+
+        let audiosList: any[] = [];
+        if (automation.audios) {
+            try {
+                audiosList = typeof automation.audios === 'string'
+                    ? JSON.parse(automation.audios)
+                    : automation.audios;
+            } catch (e) {
+                audiosList = [];
+            }
+        }
+
+        const selectedAudio = (isVideo && !isStory && audiosList.length > 0)
+            ? audiosList[videoPostIndex % audiosList.length]
+            : null;
+
         const postData = {
             type: 'schedule' as const,
             date,
@@ -288,24 +324,42 @@ export class AutomationSchedulingService {
             shortLink: (automation.organization as any)?.shortlink === 'YES' || (automation.organization as any)?.shortlink === 'ASK',
             tags: [],
             automationId: automation.id,
-            posts: integrations.map((integrationId: string) => ({
-                group,
-                integration: { id: integrationId },
-                settings: {
-                    __type: automation.integrations.find((i: any) => i.integrationId === integrationId).integration.providerIdentifier,
-                    post_type: postType || 'post',
-                },
-                value: [{
-                    id: '',
-                    content: caption,
-                    delay: 0,
-                    image: media.map((m: any) => ({
-                        id: m.id,
-                        name: m.name,
-                        path: m.path,
-                    })),
-                }],
-            })),
+            posts: integrations.map((integrationId: string) => {
+                const integrationObj = automation.integrations.find((i: any) => i.integrationId === integrationId)?.integration;
+                const providerIdentifier = integrationObj?.providerIdentifier;
+                const isInstagram = providerIdentifier === 'instagram' || providerIdentifier === 'instagram-standalone';
+
+                const audioSetting = (isInstagram && isVideo && !isStory && selectedAudio?.id) ? {
+                    audio: {
+                        id: selectedAudio.id,
+                        title: selectedAudio.title,
+                        artist: selectedAudio.artist,
+                        image: selectedAudio.image,
+                        audio_volume: selectedAudio.audio_volume ?? 100,
+                        video_volume: selectedAudio.video_volume ?? 100,
+                    }
+                } : {};
+
+                return {
+                    group,
+                    integration: { id: integrationId },
+                    settings: {
+                        __type: providerIdentifier,
+                        post_type: postType || 'post',
+                        ...audioSetting,
+                    },
+                    value: [{
+                        id: '',
+                        content: caption,
+                        delay: 0,
+                        image: media.map((m: any) => ({
+                            id: m.id,
+                            name: m.name,
+                            path: m.path,
+                        })),
+                    }],
+                };
+            }),
         };
 
         await this.postsService.createPost(orgId, postData as any);

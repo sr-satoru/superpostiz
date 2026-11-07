@@ -73,6 +73,7 @@ export class AutomationRepository {
             deleteMediaAfterPost,
             randomCaptions,
             deleteScheduledMedia,
+            audios,
         } = data;
 
         const automationData = {
@@ -83,6 +84,7 @@ export class AutomationRepository {
             daysOfWeek: JSON.stringify(daysOfWeek),
             deleteMediaAfterPost,
             randomCaptions: !!randomCaptions,
+            audios: audios ? JSON.stringify(audios) : null,
         };
 
         return this._tx.model.$transaction(async (tx) => {

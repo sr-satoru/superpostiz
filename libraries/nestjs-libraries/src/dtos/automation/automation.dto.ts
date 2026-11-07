@@ -1,5 +1,16 @@
 import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 
+export interface AutomationAudio {
+    id: string;
+    title?: string;
+    artist?: string;
+    image?: string;
+    previewUrl?: string;
+    duration?: number;
+    audio_volume?: number;
+    video_volume?: number;
+}
+
 export class AutomationDto {
     @IsString()
     name: string;
@@ -37,4 +48,8 @@ export class AutomationDto {
     @IsBoolean()
     @IsOptional()
     deleteScheduledMedia?: boolean;
+
+    @IsArray()
+    @IsOptional()
+    audios?: AutomationAudio[];
 }
