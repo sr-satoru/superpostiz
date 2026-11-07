@@ -200,21 +200,27 @@ export class InstagramStandaloneProvider
     postDetails: PostDetails<InstagramDto>[],
     integration: Integration
   ): Promise<PostResponse[]> {
+    const apiHost = process.env.INSTAGRAM_CONFIG_ID
+      ? 'graph.facebook.com'
+      : 'graph.instagram.com';
     return instagramProvider.post(
       id,
       accessToken,
       postDetails,
       integration,
-      'graph.instagram.com'
+      apiHost
     );
   }
 
   async analytics(id: string, accessToken: string, date: number) {
+    const apiHost = process.env.INSTAGRAM_CONFIG_ID
+      ? 'graph.facebook.com'
+      : 'graph.instagram.com';
     return instagramProvider.analytics(
       id,
       accessToken,
       date,
-      'graph.instagram.com'
+      apiHost
     );
   }
 }
