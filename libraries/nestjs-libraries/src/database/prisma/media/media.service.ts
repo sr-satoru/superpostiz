@@ -24,7 +24,7 @@ export class MediaService {
     private _videoManager: VideoManager
   ) {}
 
-  async deleteMedia(org: string, id: string, hardDelete = false) {
+  async deleteMedia(org: string, id: string, hardDelete = true) {
     if (!hardDelete) {
       return this._mediaRepository.deleteMedia(org, id);
     }

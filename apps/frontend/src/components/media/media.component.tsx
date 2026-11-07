@@ -201,7 +201,7 @@ export const MediaBox: FC<{
   closeModal: () => void;
 }> = ({ type, standalone, setMedia }) => {
   const [page, setPage] = useState(0);
-  const [hardDelete, setHardDelete] = useState(false);
+  const [hardDelete, setHardDelete] = useState(true);
   const fetch = useFetch();
   const modals = useModals();
   const loadMedia = useCallback(async () => {
@@ -298,20 +298,17 @@ export const MediaBox: FC<{
       const confirmMsg = hardDelete
         ? t(
             'are_you_sure_hard_delete_media',
-            'ATENÇÃO: A exclusão definitiva está ATIVADA! O arquivo físico será apagado do disco do servidor permanentemente e não poderá ser recuperado.'
+            'Deseja excluir permanentemente este arquivo do disco e do servidor?'
           )
         : t(
             'are_you_sure_you_want_to_delete_the_image',
             'Are you sure you want to delete the image?'
           );
       const confirmBtn = hardDelete
-        ? t('yes_hard_delete_it', 'Sim, apagar do disco!')
-        : undefined;
-      const title = hardDelete
-        ? t('permanent_deletion_title', 'Exclusão Permanente do Servidor')
+        ? t('yes_hard_delete_it', 'Sim, excluir do disco')
         : undefined;
 
-      if (!(await deleteDialog(confirmMsg, confirmBtn, title))) {
+      if (!(await deleteDialog(confirmMsg, confirmBtn))) {
         return;
       }
       await fetch(`/media/${media.id}?hardDelete=${hardDelete}`, {
@@ -362,10 +359,10 @@ export const MediaBox: FC<{
                 type="button"
                 onClick={() => setHardDelete((prev) => !prev)}
                 className={clsx(
-                  'cursor-pointer flex items-center gap-[8px] h-[44px] px-[14px] rounded-[8px] text-[13px] font-[500] border transition-all select-none',
+                  'cursor-pointer flex items-center gap-[8px] h-[44px] px-[14px] rounded-[8px] text-[13px] font-[500] border transition-colors select-none',
                   hardDelete
-                    ? 'bg-red-500/15 border-red-500/80 text-red-400 hover:bg-red-500/25 shadow-[0_0_12px_rgba(239,68,68,0.2)]'
-                    : 'bg-btnSimple border-transparent text-newTextColor/70 hover:text-newTextColor'
+                    ? 'bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/20'
+                    : 'bg-btnSimple border-transparent text-newTextColor/60 hover:text-newTextColor'
                 )}
                 title={
                   hardDelete
@@ -375,22 +372,20 @@ export const MediaBox: FC<{
                       )
                     : t(
                         'hard_delete_inactive_tooltip',
-                        'Clique para ativar exclusão definitiva do disco ao apagar arquivos.'
+                        'Clique para desativar a exclusão física do disco ao apagar arquivos.'
                       )
                 }
               >
                 <span
                   className={clsx(
-                    'w-[9px] h-[9px] rounded-full transition-all',
-                    hardDelete
-                      ? 'bg-red-500 animate-pulse ring-2 ring-red-400/50'
-                      : 'bg-gray-400/60'
+                    'w-[8px] h-[8px] rounded-full',
+                    hardDelete ? 'bg-red-500' : 'bg-gray-400/60'
                   )}
                 />
                 <span>
                   {hardDelete
-                    ? t('hard_delete_media_enabled', 'Excluir Definitivo (Disco)')
-                    : t('hard_delete_media_disabled', 'Soft Delete (Padrão)')}
+                    ? t('hard_delete_media_enabled', 'Excluir do Disco: Ativado')
+                    : t('hard_delete_media_disabled', 'Excluir do Disco: Desativado')}
                 </span>
               </button>
               {btn}
@@ -475,11 +470,10 @@ export const MediaBox: FC<{
                 >
                   <div
                     className={clsx(
-                      'w-full h-full rounded-[6px] border-[4px] relative transition-all',
+                      'w-full h-full rounded-[6px] border-[4px] relative',
                       !!selected.find((p) => p.id === media.id)
                         ? 'border-[#612BD3]'
-                        : 'border-transparent',
-                      hardDelete && 'hover:ring-2 hover:ring-red-500/60'
+                        : 'border-transparent'
                     )}
                     onClick={addRemoveSelected(media)}
                   >
@@ -489,10 +483,7 @@ export const MediaBox: FC<{
                       </div>
                     ) : (
                       <DeleteCircleIcon
-                        className={clsx(
-                          'cursor-pointer hidden z-[100] group-hover:block absolute -top-[5px] -end-[5px] transition-transform hover:scale-110',
-                          hardDelete && 'drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]'
-                        )}
+                        className="cursor-pointer hidden z-[100] group-hover:block absolute -top-[5px] -end-[5px]"
                         onClick={deleteImage(media)}
                       />
                     )}

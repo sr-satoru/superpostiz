@@ -41,7 +41,8 @@ export class MediaController {
     @Param('id') id: string,
     @Query('hardDelete') hardDelete?: string
   ) {
-    return this._mediaService.deleteMedia(org.id, id, hardDelete === 'true');
+    const isHardDelete = hardDelete !== undefined ? hardDelete === 'true' : true;
+    return this._mediaService.deleteMedia(org.id, id, isHardDelete);
   }
 
   @Post('/generate-video')
